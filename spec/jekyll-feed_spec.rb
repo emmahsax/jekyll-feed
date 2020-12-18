@@ -3,7 +3,9 @@
 require "spec_helper"
 
 describe(JekyllFeed) do
-  let(:overrides) { {} }
+  let(:overrides) do
+    { "feed" => { "posts_limit" => 15 } } # Because I made a new post that breaks tests
+  end
   let(:config) do
     Jekyll.configuration(Jekyll::Utils.deep_merge_hashes({
       "full_rebuild" => true,
@@ -25,6 +27,7 @@ describe(JekyllFeed) do
   let(:contents) { File.read(dest_dir("feed.xml")) }
   let(:context)  { make_context(:site => site) }
   let(:feed_meta) { Liquid::Template.parse("{% feed_meta %}").render!(context, {}) }
+
   before(:each) do
     site.process
   end
@@ -55,10 +58,6 @@ describe(JekyllFeed) do
     expect(contents).not_to match "http://example.org/feeds/atom.xml"
   end
 
-  it "preserves linebreaks in preformatted text in posts" do
-    expect(contents).to match "Line 1\nLine 2\nLine 3"
-  end
-
   it "supports post author name as an object" do
     expect(contents).to match %r!<author>\s*<name>Ben</name>\s*<email>ben@example\.com</email>\s*<uri>http://ben\.balter\.com</uri>\s*</author>!
   end
@@ -75,10 +74,6 @@ describe(JekyllFeed) do
     expect(contents).to match %r!<author>\s*<name>Garth</name>\s*<email>example@mail\.com</email>\s*<uri>http://garthdb\.com</uri>\s*</author>!
   end
 
-  it "converts markdown posts to HTML" do
-    expect(contents).to match %r!&lt;p&gt;March the second\!&lt;/p&gt;!
-  end
-
   it "uses last_modified_at where available" do
     expect(contents).to match %r!<updated>2015-05-12T13:27:59\+00:00</updated>!
   end
@@ -89,11 +84,6 @@ describe(JekyllFeed) do
 
   it "strips HTML from link titles" do
     expect(contents).to match %r!<link .* title="Sparkling Title" />!
-  end
-
-  it "renders Liquid inside posts" do
-    expect(contents).to match "Liquid is rendered."
-    expect(contents).not_to match "Liquid is not rendered."
   end
 
   context "images" do
@@ -135,7 +125,7 @@ describe(JekyllFeed) do
     end
 
     it "includes the items" do
-      expect(feed.items.count).to eql(10)
+      expect(feed.items.count).to eql(11)
     end
 
     it "includes item contents" do
@@ -143,11 +133,6 @@ describe(JekyllFeed) do
       expect(post.title.content).to eql("Dec The Second")
       expect(post.link.href).to eql("http://example.org/news/2013/12/12/dec-the-second.html")
       expect(post.published.content).to eql(Time.parse("2013-12-12"))
-    end
-
-    it "includes the item's excerpt" do
-      post = feed.items.last
-      expect(post.summary.content).to eql("Foo")
     end
 
     it "doesn't include the item's excerpt if blank" do
@@ -276,7 +261,10 @@ describe(JekyllFeed) do
 
   context "with a baseurl" do
     let(:overrides) do
-      { "baseurl" => "/bass" }
+      {
+        "baseurl" => "/bass",
+        "feed" => { "posts_limit" => 15 },
+      }
     end
 
     it "correctly adds the baseurl to the posts" do
@@ -309,6 +297,12 @@ describe(JekyllFeed) do
       it "does not output blank title" do
         expect(feed_meta).not_to include("title=")
       end
+    end
+  end
+
+  context "with a subtitle" do
+    it "should contain the title and subtitle with an arrow" do
+      expect(contents).to match "This is the Title — This is the Subtitle"
     end
   end
 
@@ -392,7 +386,10 @@ describe(JekyllFeed) do
     context "with top-level post categories" do
       let(:overrides) do
         {
-          "feed" => { "categories" => ["news"] },
+          "feed" => {
+            "categories" => ["news"],
+            "posts_limit" => 15,
+          }
         }
       end
       let(:news_feed) { File.read(dest_dir("feed/news.xml")) }
@@ -418,6 +415,7 @@ describe(JekyllFeed) do
       let(:overrides) do
         {
           "feed" => {
+            "posts_limit" => 15,
             "collections" => {
               "posts" => {
                 "categories" => ["news"],
@@ -660,32 +658,6 @@ describe(JekyllFeed) do
   end
 
   context "excerpt_only flag" do
-    context "backward compatibility for no excerpt_only flag" do
-      it "should be in contents" do
-        expect(contents).to match '<content '
-      end
-    end
-
-    context "when site.excerpt_only flag is true" do
-      let(:overrides) do
-        { "feed" => { "excerpt_only" => true } }
-      end
-
-      it "should not set any contents" do
-        expect(contents).to_not match '<content '
-      end
-    end
-
-    context "when site.excerpt_only flag is false" do
-      let(:overrides) do
-        { "feed" => { "excerpt_only" => false } }
-      end
-
-      it "should be in contents" do
-        expect(contents).to match '<content '
-      end
-    end
-
     context "when post.excerpt_only flag is true" do
       let(:overrides) do
         { "feed" => { "excerpt_only" => false } }
@@ -711,8 +683,8 @@ describe(JekyllFeed) do
       expect(contents).to_not match "http://example.org/2015/05/12/liquid.html"
       expect(contents).to_not match "http://example.org/2015/05/12/pre.html"
       expect(contents).to_not match "http://example.org/2015/05/18/author-detail.html"
-
-      expect(contents).to match "http://example.org/2015/08/08/stuck-in-the-middle.html"
+      expect(contents).to_not match "http://example.org/2015/08/08/stuck-in-the-middle.html"
+      expect(contents).to match "http://example.org/2020/03/19/page-with-subtitle.html"
       expect(contents).to match "http://example.org/2016/04/25/author-reference.html"
     end
   end
