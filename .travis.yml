@@ -1,12 +1,13 @@
 language: ruby
 cache: bundler
+
 rvm:
   - &latest_ruby 2.7
   - 2.5
 
 branches:
   only:
-  - main
+    - main
 
 env:
   matrix:
@@ -24,5 +25,8 @@ before_install:
   - gem update --system
   - gem install bundler
 
-before_script: bundle update
-script: script/cibuild
+before_script:
+  - bundle update
+
+script:
+  - script/cibuild
