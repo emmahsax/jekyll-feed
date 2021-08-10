@@ -22,10 +22,10 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 2.2"
   spec.add_development_dependency "guard-rspec", "~> 4.7"
-  spec.add_development_dependency "nokogiri", "~> 1.10"
+  spec.add_development_dependency "nokogiri", "~> 1.6"
   spec.add_development_dependency "rake", "~> 13.0"
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "rss", "~> 0.2"
-  spec.add_development_dependency "rubocop-jekyll", "~> 0.4"
-  spec.add_development_dependency "typhoeus", "~> 1.4"
+  spec.add_development_dependency "rubocop-jekyll", "~> 0.5"
+  spec.add_development_dependency "typhoeus", ">= 0.7", "< 2.0"
 end
