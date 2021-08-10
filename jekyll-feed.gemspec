@@ -27,5 +27,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "rss"
   spec.add_development_dependency "rubocop-jekyll"
-  spec.add_development_dependency "typhoeus"#, ">= 0.7", "< 2.0"
+  spec.add_development_dependency "typhoeus"
 end
