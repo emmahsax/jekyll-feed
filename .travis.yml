@@ -15,6 +15,11 @@ env:
     - JEKYLL_VERSION="~> 3.9"
     - JEKYLL_VERSION="~> 4.2"
 
+matrix:
+  exclude:
+    - rvm: 2.5
+      env: JEKYLL_VERSION="~> 4.2"
+
 before_install:
   - gem update --system
   - gem install bundler
