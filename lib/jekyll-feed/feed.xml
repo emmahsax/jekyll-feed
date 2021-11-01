@@ -78,7 +78,7 @@
   {% for post in posts limit: posts_limit %}
     <entry{% if post.lang %}{{" "}}xml:lang="{{ post.lang }}"{% endif %}>
       {% if post.subtitle %}
-        {% assign post_title = post.title | append: " — " | append: post.subtitle %}
+        {% assign post_title = post.title | append: " – " | append: post.subtitle %}
       {% else %}
         {% assign post_title = post.title %}
       {% endif %}
