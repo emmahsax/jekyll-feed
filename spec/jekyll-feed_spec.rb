@@ -302,7 +302,7 @@ describe(JekyllFeed) do
 
   context "with a subtitle" do
     it "should contain the title and subtitle with an arrow" do
-      expect(contents).to match "This is the Title — This is the Subtitle"
+      expect(contents).to match "This is the Title – This is the Subtitle"
     end
   end
 
