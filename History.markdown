@@ -1,9 +1,24 @@
-## HEAD
+## 0.16.0 / 2022-01-03
+
+### Minor Enhancements
+
+  * Add support for `page.description` in front matter to become entry `<summary>` (#297)
+
+### Bug Fixes
+
+  * Fold private methods into the `:render` method as local variables (#327)
+  * Check `post.categories` instead of `post.category` (#357)
+  * Switched xml_escape for `<![CDATA[]]>` for post content (#332)
 
 ### Development Fixes
 
   * Add Ruby 3.0 to CI (#337)
   * Lock RuboCop to v1.18.x (#348)
+  * Add workflow to release gem via GH Action (#355)
+
+### Documentation
+
+  * Use `.atom` extension in documented examples since we write an Atom feed (#359)
 
 ## 0.15.1 / 2020-10-04
 

@@ -74,6 +74,10 @@ describe(JekyllFeed) do
     expect(contents).to match %r!<author>\s*<name>Garth</name>\s*<email>example@mail\.com</email>\s*<uri>http://garthdb\.com</uri>\s*</author>!
   end
 
+  it "converts markdown posts to HTML" do
+    expect(contents).to match %r!<\!\[CDATA\[<p>March the second\!</p>\]\]!
+  end
+
   it "uses last_modified_at where available" do
     expect(contents).to match %r!<updated>2015-05-12T13:27:59\+00:00</updated>!
   end
@@ -133,6 +137,16 @@ describe(JekyllFeed) do
       expect(post.title.content).to eql("Dec The Second")
       expect(post.link.href).to eql("http://example.org/news/2013/12/12/dec-the-second.html")
       expect(post.published.content).to eql(Time.parse("2013-12-12"))
+    end
+
+    it "includes the item's excerpt" do
+      post = feed.items.last
+      expect(post.summary.content).to eql("Foo")
+    end
+
+    it "includes the item's description" do
+      post = feed.items[-2]
+      expect(post.summary.content).to eql("cool post")
     end
 
     it "doesn't include the item's excerpt if blank" do
@@ -387,12 +401,13 @@ describe(JekyllFeed) do
       let(:overrides) do
         {
           "feed" => {
-            "categories" => ["news"],
+            "categories" => %w(news jekyll),
             "posts_limit" => 15,
           }
         }
       end
-      let(:news_feed) { File.read(dest_dir("feed/news.xml")) }
+      let(:singular_category_feed) { File.read(dest_dir("feed/news.xml")) }
+      let(:plural_categories_feed) { File.read(dest_dir("feed/jekyll.xml")) }
 
       it "outputs the primary feed" do
         expect(contents).to match "http://example.org/updates/jekyll/2014/03/04/march-the-fourth.html"
@@ -402,12 +417,13 @@ describe(JekyllFeed) do
         expect(contents).to_not match "http://example.org/2016/02/09/a-draft.html"
       end
 
-      it "outputs the category feed" do
-        expect(news_feed).to match '<title type="html">My awesome site | News</title>'
-        expect(news_feed).to match "http://example.org/news/2014/03/02/march-the-second.html"
-        expect(news_feed).to match "http://example.org/news/2013/12/12/dec-the-second.html"
-        expect(news_feed).to_not match "http://example.org/updates/jekyll/2014/03/04/march-the-fourth.html"
-        expect(news_feed).to_not match "http://example.org/2015/08/08/stuck-in-the-middle.html"
+      it "outputs the category feeds" do
+        expect(singular_category_feed).to match '<title type="html">My awesome site | News</title>'
+        expect(singular_category_feed).to match "http://example.org/news/2014/03/02/march-the-second.html"
+        expect(singular_category_feed).to match "March the second!"
+        expect(plural_categories_feed).to match '<title type="html">My awesome site | News</title>'
+        expect(plural_categories_feed).to match "http://example.org/updates/jekyll/2014/03/04/march-the-fourth.html"
+        expect(plural_categories_feed).to match "March the fourth!"
       end
     end
 

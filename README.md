@@ -40,7 +40,7 @@ Do you already have an existing feed someplace other than `/feed.xml`, but are o
 
 ```yml
 feed:
-  path: atom.xml
+  path: /blog/feed.atom
 ```
 
 To note, you shouldn't have to do this unless you already have a feed you're using, and you can't or wish not to redirect existing subscribers.
@@ -61,6 +61,8 @@ Additionally, the plugin will use the following values, if present in a post's Y
 * `image` - URL of an image that is representative of the post (can also be passed as `image.path`)
 
 * `author` - The author of the post, e.g., "Dr. Jekyll". If none is given, feed readers will look to the feed author as defined in `_config.yml`. Like the feed author, this can also be an object or a reference to an author in `_data/authors.yml` (see below).
+
+* `description` - A short description of the post.
 
 ### Author information
 
@@ -176,7 +178,7 @@ By default, collection feeds will be outputted to `/feed/<COLLECTION>.xml`. If y
 feed:
   collections:
     changes:
-      path: "/changes.xml"
+      path: "/changes.atom"
 ```
 
 Finally, collections can also have category feeds which are outputted as `/feed/<COLLECTION>/<CATEGORY>.xml`. Specify categories like so:
@@ -185,7 +187,7 @@ Finally, collections can also have category feeds which are outputted as `/feed/
 feed:
   collections:
     changes:
-      path: "/changes.xml"
+      path: "/changes.atom"
       categories:
         - news
         - updates
