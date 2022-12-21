@@ -1,4 +1,4 @@
-## HEAD
+## 0.17.0 / 2022-10-14
 
 ### Documentation
 
@@ -7,6 +7,10 @@
 ### Development Fixes
 
   * Add Ruby 3.1 to the CI matrix (#365)
+
+### Minor Enhancements
+
+  * Allow disabling of jekyll-feed while in development (#370)
 
 ## 0.16.0 / 2022-01-03
 
