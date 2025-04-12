@@ -4,6 +4,16 @@ A Jekyll plugin to generate an Atom (RSS-like) feed of your Jekyll posts
 
 [![Continuous Integration](https://github.com/jekyll/jekyll-feed/actions/workflows/ruby.yml/badge.svg)](https://github.com/jekyll/jekyll-feed/actions/workflows/ruby.yml) [![Gem Version](https://badge.fury.io/rb/jekyll-feed.svg)](https://badge.fury.io/rb/jekyll-feed)
 
+## Archival Notice
+
+This repository has been archived and designated as read-only. From GitHub's documentation:
+
+> This will make the emmahsax/jekyll-feed repository, issues, pull requests, labels, milestones, projects, wiki, releases, commits, tags, branches, reactions and comments read-only and disable any future comments. The repository can still be forked.
+
+For a similar GitHub Action that is _not_ archived, please visit the source of this project: https://github.com/jekyll/jekyll-feed.
+
+To unarchive this repository at any time, please reach out to me at https://emmasax.com/contact-me/.
+
 ## Installation
 
 Add this line to your site's Gemfile:
